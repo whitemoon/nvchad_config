@@ -15,6 +15,10 @@ vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decr
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
+vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
+vim.opt.cursorcolumn = true
+vim.opt.cursorline = true
+
 if vim.g.neovide then
   vim.o.guifont = "Iosevka Nerd Font Mono:h15"
   vim.g.neovide_refresh_rate = 75
@@ -32,4 +36,4 @@ if vim.g.neovide then
   -- vim.g.neovide_scroll_animation_length = 0.3
 end
 
-require "custom.autocmd"
+require "custom.autocmds"

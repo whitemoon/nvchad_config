@@ -4,9 +4,9 @@ local M = {}
 local utils = require "custom.utils"
 
 M.general = {
-  -- n = {
-  --   [";"] = { ":", "enter command mode", opts = { nowait = true } },
-  -- },
+  n = {
+    q = { "<cmd>cclose<cr>", "close quickfix" },
+  },
   v = {
     [">"] = { ">gv", "indent" },
     ["/"] = { 'y/<c-r>"<cr>' },
@@ -30,6 +30,17 @@ M.tabufline = {
         require("nvchad.tabufline").tabuflinePrev()
       end,
       "Goto prev buffer",
+    },
+  },
+}
+
+M.lspconfig = {
+  n = {
+    ["ga"] = {
+      function()
+        vim.lsp.buf.code_action()
+      end,
+      "LSP code action",
     },
   },
 }
@@ -121,31 +132,31 @@ M.neogen = {
       function()
         require("neogen").generate { type = "current" }
       end,
-      "Current",
+      "Neogen: Current",
     },
     ["<leader>lc"] = {
       function()
         require("neogen").generate { type = "class" }
       end,
-      "Class",
+      "Neogen: Class",
     },
     ["<leader>lu"] = {
       function()
         require("neogen").generate { type = "func" }
       end,
-      "Function",
+      "Neogen: Function",
     },
     ["<leader>lt"] = {
       function()
         require("neogen").generate { type = "type" }
       end,
-      "Type",
+      "Neogen: Type",
     },
     ["<leader>lU"] = {
       function()
         require("neogen").generate { type = "file" }
       end,
-      "File",
+      "Neogen: File",
     },
   },
 }
@@ -173,109 +184,109 @@ M.dap = {
       function()
         require("dapui").eval()
       end,
-      "Eval",
+      "Dap: Eval",
     },
     ["<leader>dB"] = {
       function()
         require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ")
       end,
-      "Breakpoint Condition",
+      "Dap: Breakpoint Condition",
     },
     ["<leader>db"] = {
       function()
         require("dap").toggle_breakpoint()
       end,
-      "Toggle Breakpoint",
+      "Dap: Toggle Breakpoint",
     },
     ["<leader>dc"] = {
       function()
         require("dap").continue()
       end,
-      "Continue",
+      "Dap: Continue",
     },
     ["<leader>da"] = {
       function()
         require("dap").continue { before = utils.get_args }
       end,
-      "Run with Args",
+      "Dap: Run with Args",
     },
     ["<leader>dC"] = {
       function()
         require("dap").run_to_cursor()
       end,
-      "Run to Cursor",
+      "Dap: Run to Cursor",
     },
     ["<leader>dg"] = {
       function()
         require("dap").goto_()
       end,
-      "Go to line (no execute)",
+      "Dap: Go to line (no execute)",
     },
     ["<leader>di"] = {
       function()
         require("dap").step_into()
       end,
-      "Step Into",
+      "Dap: Step Into",
     },
     ["<leader>dj"] = {
       function()
         require("dap").down()
       end,
-      "Down",
+      "Dap: Down",
     },
     ["<leader>dk"] = {
       function()
         require("dap").up()
       end,
-      "Up",
+      "Dap: Up",
     },
     ["<leader>dl"] = {
       function()
         require("dap").run_last()
       end,
-      "Run Last",
+      "Dap: Run Last",
     },
     ["<leader>dO"] = {
       function()
         require("dap").step_out()
       end,
-      "Step Out",
+      "Dap: Step Out",
     },
     ["<leader>do"] = {
       function()
         require("dap").step_over()
       end,
-      "Step Over",
+      "Dap: Step Over",
     },
     ["<leader>dp"] = {
       function()
         require("dap").pause()
       end,
-      "Pause",
+      "Dap: Pause",
     },
     ["<leader>dr"] = {
       function()
         require("dap").repl.toggle()
       end,
-      "Toggle REPL",
+      "Dap: Toggle REPL",
     },
     ["<leader>ds"] = {
       function()
         require("dap").session()
       end,
-      "Session",
+      "Dap: Session",
     },
     ["<leader>dt"] = {
       function()
         require("dap").terminate()
       end,
-      "Terminate",
+      "Dap: Terminate",
     },
     ["<leader>dw"] = {
       function()
         require("dap.ui.widgets").hover()
       end,
-      "Widgets",
+      "Dap: Widgets",
     },
   },
 }
@@ -301,6 +312,13 @@ M.rust_tools = {
   n = {
     K = { "<cmd>RustHoverActions<cr>", "Hover Actions (Rust)" },
     ["ga"] = { "<cmd>RustCodeAction<cr>", "Code Action (Rust)" },
+  },
+}
+
+M.clangd = {
+  plugin = true,
+  n = {
+    ["<leader>cR"] = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch Source/Header (C/C++)" },
   },
 }
 

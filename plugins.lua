@@ -11,6 +11,9 @@ local plugins = {
       -- format & linting
       {
         "nvimtools/none-ls.nvim",
+        init = function()
+          require("core.utils").lazy_load "none-ls.nvim"
+        end,
         config = function()
           require "custom.configs.null-ls"
         end,
@@ -43,6 +46,11 @@ local plugins = {
     enabled = false,
   },
 
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    version = "2",
+  },
+
   -- Install a plugin
   {
     "max397574/better-escape.nvim",
@@ -54,7 +62,6 @@ local plugins = {
 
   {
     "nvim-neo-tree/neo-tree.nvim",
-    event = "VeryLazy",
     lazy = true,
     dependencies = { "MunifTanjim/nui.nvim" },
     init = function()
@@ -84,26 +91,31 @@ local plugins = {
     event = "VeryLazy",
   },
 
-  { "folke/todo-comments.nvim", opts = {}, lazy = true, event = "VeryLazy" },
+  {
+    "folke/todo-comments.nvim",
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = "VeryLazy",
+    opts = {},
+    config = true,
+  },
   {
     "jay-babu/project.nvim",
-    main = "project_nvim",
-    event = "VeryLazy",
     lazy = true,
     opts = { ignore_lsp = { "lua_ls" } },
+    config = function(_, opts)
+      require("project_nvim").setup(opts)
+    end,
   },
 
   {
     "kylechui/nvim-surround",
     lazy = true,
-    event = "VeryLazy",
     opts = {},
   },
 
   {
     "folke/flash.nvim",
     lazy = true,
-    event = "VeryLazy",
     vscode = true,
     init = function()
       require("core.utils").load_mappings "flash"
@@ -114,7 +126,6 @@ local plugins = {
   {
     "danymat/neogen",
     lazy = true,
-    event = "VeryLazy",
     cmd = "Neogen",
     init = function()
       require("core.utils").load_mappings "neogen"
@@ -131,21 +142,26 @@ local plugins = {
 
   {
     "smoka7/multicursors.nvim",
-    event = "VeryLazy",
     lazy = true,
     dependencies = { "smoka7/hydra.nvim" },
+    init = function()
+      require("core.utils").load_mappings "multicursors"
+    end,
     opts = {},
   },
 
   {
     "mfussenegger/nvim-dap",
     lazy = true,
-    event = "VeryLazy",
+    init = function()
+      require("core.utils").load_mappings "dap"
+    end,
     opts = {},
     dependencies = {
       -- fancy UI for the debugger
       {
         "rcarriga/nvim-dap-ui",
+        lazy = true,
         config = function()
           require "custom.configs.nvim-dap-ui"
         end,
@@ -155,7 +171,6 @@ local plugins = {
       {
         "theHamsta/nvim-dap-virtual-text",
         lazy = true,
-        event = "VeryLazy",
         opts = {},
       },
     },
@@ -170,6 +185,9 @@ local plugins = {
       {
         "Saecki/crates.nvim",
         event = { "BufRead Cargo.toml" },
+        init = function()
+          require("core.utils").load_mappings "taplo"
+        end,
         opts = {
           src = {
             cmp = { enabled = true },
@@ -184,18 +202,23 @@ local plugins = {
 
   {
     "simrat39/rust-tools.nvim",
+    ft = { "rust" },
     lazy = true,
-    ft = "rust",
     opts = function()
       return require "custom.configs.rust-tools"
     end,
-    config = function() end,
+    config = function(_, opts)
+      require("core.utils").load_mappings "rust_tools"
+      require("rust-tools").setup(opts)
+    end,
   },
 
   {
     "p00f/clangd_extensions.nvim",
+    ft = { "cpp", "c" },
     lazy = true,
     config = function(_, opts)
+      require("core.utils").load_mappings "clangd"
       local custom_opts = require "custom.configs.clangd"
       require("clangd_extensions").setup(vim.tbl_deep_extend("force", opts or {}, custom_opts))
     end,

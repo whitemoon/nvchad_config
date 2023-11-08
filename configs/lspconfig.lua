@@ -4,7 +4,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 local lspconfig = require "lspconfig"
 
 -- if you just want default config for the servers then put them in a table
-local servers = { "clangd", "pyright", "ruff_lsp" }
+local servers = { "lua_ls", "pyright", "ruff_lsp" }
 
 local function cusom_on_attach(client, bufnr)
   local inlay_hint = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
