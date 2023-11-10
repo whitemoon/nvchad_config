@@ -5,11 +5,14 @@ local utils = require "custom.utils"
 
 M.general = {
   n = {
-    q = { "<cmd>cclose<cr>", "close quickfix" },
+    q = { "<cmd>close<cr>", "close buffer" },
   },
   v = {
     [">"] = { ">gv", "indent" },
     ["/"] = { 'y/<c-r>"<cr>' },
+  },
+  i = {
+    ["<C-s>"] = { "<ESC><cmd>w<cr>" },
   },
 }
 

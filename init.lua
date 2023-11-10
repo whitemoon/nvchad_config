@@ -5,19 +5,34 @@
 --   pattern = "*",
 --   command = "tabdo wincmd =",
 -- })
+local opt = vim.opt
 
-vim.opt.spelllang = "en_us,cjk"
-vim.opt.fileencodings = "ucs-bom,utf-8,gbk,big5,gb18030,latin1"
-vim.opt.list = true
+opt.spelllang = "en_us,cjk"
+opt.fileencodings = "ucs-bom,utf-8,gbk,big5,gb18030,latin1"
+opt.list = true
 
-vim.o.foldcolumn = "1" -- '0' is not bad
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
+opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  -- fold = "⸱",
+  fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+-- Folding
+opt.foldlevel = 99
+opt.foldtext = "v:lua.require'custom.utils'.foldtext()"
+-- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
+if vim.fn.has "nvim-0.10" == 1 then
+  opt.foldmethod = "expr"
+  opt.foldexpr = "v:lua.require'custom.utils'.foldexpr()"
+else
+  opt.foldmethod = "indent"
+end
 
-vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
-vim.opt.cursorcolumn = true
-vim.opt.cursorline = true
+opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
+opt.cursorcolumn = true
 
 if vim.g.neovide then
   vim.o.guifont = "Iosevka Nerd Font Mono:h15"

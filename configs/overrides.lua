@@ -13,6 +13,7 @@ M.treesitter = {
     "json",
     "yaml",
     "python",
+    "bash",
   },
   indent = {
     enable = true,
@@ -31,6 +32,11 @@ M.mason = {
     -- lua stuff
     "lua-language-server",
     "stylua",
+
+    -- bash
+    "bash-language-server",
+    "shfmt",
+    "shellcheck",
 
     -- web dev stuff
     "prettier",
