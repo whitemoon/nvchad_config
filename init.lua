@@ -10,6 +10,7 @@ local opt = vim.opt
 opt.spelllang = "en_us,cjk"
 opt.fileencodings = "ucs-bom,utf-8,gbk,big5,gb18030,latin1"
 opt.list = true
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 opt.fillchars = {
   foldopen = "",

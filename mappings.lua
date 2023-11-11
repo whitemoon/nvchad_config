@@ -325,4 +325,42 @@ M.clangd = {
   },
 }
 
+M.illuminate = {
+  plugin = true,
+  n = {
+    ["]]"] = {
+      function()
+        require("illuminate")["goto_next_reference"](false)
+      end,
+      "Next Reference",
+    },
+    ["[["] = {
+      function()
+        require("illuminate")["goto_prev_reference"](false)
+      end,
+      "Prev Reference",
+    },
+  },
+}
+
+M.ssr = {
+  plugin = true,
+  n = {
+    ["<leader>sr"] = {
+      function()
+        require("ssr").open()
+      end,
+      "Structural search and replace",
+    },
+  },
+  x = {
+    ["<leader>sr"] = {
+      function()
+        require("ssr").open()
+      end,
+      "Structural search and replace",
+    },
+  },
+}
+
 return M

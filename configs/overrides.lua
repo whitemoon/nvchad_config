@@ -33,8 +33,7 @@ M.mason = {
     "lua-language-server",
     "stylua",
 
-    -- bash
-    "bash-language-server",
+    -- bash fmt and lint
     "shfmt",
     "shellcheck",
 

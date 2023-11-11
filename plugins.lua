@@ -18,6 +18,8 @@ local plugins = {
           require "custom.configs.null-ls"
         end,
       },
+      { "folke/neoconf.nvim", cmd = "Neoconf", dependencies = { "nvim-lspconfig" } },
+      { "folke/neodev.nvim", opts = {} },
     },
     config = function()
       require "plugins.configs.lspconfig"
@@ -28,6 +30,14 @@ local plugins = {
   -- override plugin configs
   {
     "williamboman/mason.nvim",
+    dependencies = {
+      {
+        "williamboman/mason-lspconfig.nvim",
+        opts = {
+          automatic_installation = true,
+        },
+      },
+    },
     opts = overrides.mason,
     config = function(_, opts)
       dofile(vim.g.base46_cache .. "mason")
@@ -81,7 +91,6 @@ local plugins = {
 
   {
     "nvim-neo-tree/neo-tree.nvim",
-    lazy = true,
     dependencies = { "MunifTanjim/nui.nvim" },
     init = function()
       require("core.utils").load_mappings "neotree"
@@ -103,6 +112,9 @@ local plugins = {
         },
       },
     },
+    config = function(_, opts)
+      require("neo-tree").setup(opts)
+    end,
   },
 
   {
@@ -119,7 +131,6 @@ local plugins = {
   },
   {
     "jay-babu/project.nvim",
-    lazy = true,
     opts = { ignore_lsp = { "lua_ls" } },
     config = function(_, opts)
       require("project_nvim").setup(opts)
@@ -128,13 +139,11 @@ local plugins = {
 
   {
     "kylechui/nvim-surround",
-    lazy = true,
     opts = {},
   },
 
   {
     "folke/flash.nvim",
-    lazy = true,
     vscode = true,
     init = function()
       require("core.utils").load_mappings "flash"
@@ -144,8 +153,6 @@ local plugins = {
 
   {
     "danymat/neogen",
-    lazy = true,
-    cmd = "Neogen",
     init = function()
       require("core.utils").load_mappings "neogen"
     end,
@@ -161,7 +168,7 @@ local plugins = {
 
   {
     "smoka7/multicursors.nvim",
-    lazy = true,
+    cmd = "MCstart",
     dependencies = { "smoka7/hydra.nvim" },
     init = function()
       require("core.utils").load_mappings "multicursors"
@@ -171,7 +178,6 @@ local plugins = {
 
   {
     "mfussenegger/nvim-dap",
-    lazy = true,
     init = function()
       require("core.utils").load_mappings "dap"
     end,
@@ -180,7 +186,6 @@ local plugins = {
       -- fancy UI for the debugger
       {
         "rcarriga/nvim-dap-ui",
-        lazy = true,
         config = function()
           require "custom.configs.nvim-dap-ui"
         end,
@@ -189,7 +194,6 @@ local plugins = {
       -- virtual text for the debugger
       {
         "theHamsta/nvim-dap-virtual-text",
-        lazy = true,
         opts = {},
       },
     },
@@ -204,6 +208,7 @@ local plugins = {
       {
         "Saecki/crates.nvim",
         event = { "BufRead Cargo.toml" },
+        lazy = true,
         init = function()
           require("core.utils").load_mappings "taplo"
         end,
@@ -222,7 +227,6 @@ local plugins = {
   {
     "simrat39/rust-tools.nvim",
     ft = { "rust" },
-    lazy = true,
     opts = function()
       return require "custom.configs.rust-tools"
     end,
@@ -235,7 +239,6 @@ local plugins = {
   {
     "p00f/clangd_extensions.nvim",
     ft = { "cpp", "c" },
-    lazy = true,
     config = function(_, opts)
       require("core.utils").load_mappings "clangd"
       local custom_opts = require "custom.configs.clangd"
@@ -264,6 +267,46 @@ local plugins = {
           TemplateTemplateParm = "",
           TemplateParamObject = "",
         },
+      },
+    },
+  },
+
+  {
+    "RRethy/vim-illuminate",
+    event = "VeryLazy",
+    init = function()
+      require("core.utils").load_mappings "illuminate"
+    end,
+    opts = {
+      delay = 200,
+      large_file_cutoff = 2000,
+      large_file_overrides = {
+        providers = { "lsp" },
+      },
+    },
+    config = function(_, opts)
+      require("illuminate").configure(opts)
+    end,
+  },
+
+  {
+    "cshuaimin/ssr.nvim",
+    init = function()
+      require("core.utils").load_mappings "ssr"
+    end,
+    opts = {
+      border = "rounded",
+      min_width = 50,
+      min_height = 5,
+      max_width = 120,
+      max_height = 25,
+      adjust_window = true,
+      keymaps = {
+        close = "q",
+        next_match = "n",
+        prev_match = "N",
+        replace_confirm = "<cr>",
+        replace_all = "<leader><cr>",
       },
     },
   },
