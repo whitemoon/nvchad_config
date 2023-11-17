@@ -14,6 +14,7 @@ M.treesitter = {
     "yaml",
     "python",
     "bash",
+    "ron",
   },
   indent = {
     enable = true,
@@ -43,13 +44,12 @@ M.mason = {
     "taplo",
 
     -- c/cpp stuff
-    -- "clangd",
     -- "clang-format",
   },
 }
 
 M.telescope = {
-  extensions_list = { "projects" },
+  extensions_list = { "projects", "aerial" },
 }
 
 return M

@@ -12,15 +12,6 @@ opt.fileencodings = "ucs-bom,utf-8,gbk,big5,gb18030,latin1"
 opt.list = true
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
-opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  -- fold = "⸱",
-  fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
-}
 -- Folding
 opt.foldlevel = 99
 opt.foldtext = "v:lua.require'custom.utils'.foldtext()"
@@ -47,9 +38,6 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "ripple"
   vim.g.neovide_underline_automatic_scaling = true
   vim.g.neovide_hide_mouse_when_typing = true
-  -- vim.g.neovide_floating_blur_amount_x = 2.0
-  -- vim.g.neovide_floating_blur_amount_y = 2.0
-  -- vim.g.neovide_scroll_animation_length = 0.3
 end
 
 require "custom.autocmds"

@@ -1,4 +1,27 @@
 return {
+  inlay_hints = {
+    inline = false,
+  },
+  ast = {
+    --These require codicons (https://github.com/microsoft/vscode-codicons)
+    role_icons = {
+      type = "",
+      declaration = "",
+      expression = "",
+      specifier = "",
+      statement = "",
+      ["template argument"] = "",
+    },
+    kind_icons = {
+      Compound = "",
+      Recovery = "",
+      TranslationUnit = "",
+      PackExpansion = "",
+      TemplateTypeParm = "",
+      TemplateTemplateParm = "",
+      TemplateParamObject = "",
+    },
+  },
   server = {
     root_dir = function(fname)
       return require("lspconfig.util").root_pattern(
@@ -13,9 +36,6 @@ return {
         "lspconfig.util"
       ).find_git_ancestor(fname)
     end,
-    capabilities = {
-      offsetEncoding = { "utf-16" },
-    },
     cmd = {
       "clangd",
       "--background-index",

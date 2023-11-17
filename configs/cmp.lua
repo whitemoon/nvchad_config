@@ -5,9 +5,7 @@ opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
   { name = "crates" },
 }))
 opts.experimental = {
-  ghost_text = {
-    hl_group = "CmpGhostText",
-  },
+  ghost_text = true,
 }
 
 opts.mapping = vim.tbl_deep_extend("force", opts.mapping, {

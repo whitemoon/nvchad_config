@@ -6,6 +6,10 @@ local utils = require "custom.utils"
 M.general = {
   n = {
     q = { "<cmd>close<cr>", "close buffer" },
+    ["<C-Up>"] = { "<cmd>resize +2<cr>", "Increase window height" },
+    ["<C-Down>"] = { "<cmd>resize -2<cr>", "Decrease window height" },
+    ["<C-Left>"] = { "<cmd>vertical resize -2<cr>", "Decrease window width" },
+    ["<C-Right>"] = { "<cmd>vertical resize +2<cr>", "Increase window width" },
   },
   v = {
     [">"] = { ">gv", "indent" },
@@ -67,13 +71,17 @@ M.telescope = {
       "<cmd>Telescope projects<cr>",
       "Find projects",
     },
+    ["<leader>fs"] = {
+      "<cmd>Telescope aerial<cr>",
+      "Find Symbol (Aerial)",
+    },
     ["<leader>fT"] = {
       "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>",
       "Find Todo/Fix/Fixme",
     },
   },
   v = {
-    ["<leader>fg"] = {
+    ["<leader>fw"] = {
       function()
         require("telescope.builtin").grep_string()
       end,
@@ -360,6 +368,13 @@ M.ssr = {
       end,
       "Structural search and replace",
     },
+  },
+}
+
+M.outline = {
+  plugin = true,
+  n = {
+    ["go"] = { "<cmd>AerialToggle<cr>", "Toggle symbols outline" },
   },
 }
 

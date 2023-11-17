@@ -14,6 +14,12 @@ local sources = {
   b.formatting.clang_format,
   -- python
   b.formatting.black,
+
+  -- bash
+  b.formatting.shfmt,
+
+  -- toml
+  b.formatting.taplo,
 }
 
 null_ls.setup {

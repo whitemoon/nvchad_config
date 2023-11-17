@@ -4,42 +4,77 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 local lspconfig = require "lspconfig"
 
 local function custom_on_attach(client, bufnr)
-  local inlay_hint = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
   if client.supports_method "textDocument/inlayHint" then
-    inlay_hint(bufnr, true)
+    vim.lsp.inlay_hint.enable(bufnr, true)
   end
+
   on_attach(client, bufnr)
 end
 
 -- if you just want default config for the servers then put them in a table
 -- lua_ls installed
-local servers = {
-  pyright = {
-    mason = false,
+local opts = {
+  servers = {
+    pyright = {
+      mason = false,
+    },
+    ruff_lsp = {
+      mason = false,
+    },
+    bashls = {},
+    clangd = {
+      mason = false,
+      capabilities = {
+        offsetEncoding = { "utf-16" },
+      },
+    },
   },
-  ruff_lsp = {
-    mason = false,
-  },
-  bashls = {},
+  setup = {},
 }
-
-local ensure_installed = {}
-
 --
 -- lspconfig.pyright.setup { blabla}
-for server, server_opts in pairs(servers) do
-  server_opts.on_attach = server_opts.on_attach or custom_on_attach
-  server_opts.capabilities = vim.tbl_deep_extend("force", capabilities, server_opts.capabilities or {})
-  -- auto install from mason, not need add to overrides.lua of manualed
-  if server_opts.mason ~= false then
-    ensure_installed[#ensure_installed + 1] = server
+local function setup(server)
+  local server_opts = vim.tbl_deep_extend("force", {
+    capabilities = vim.deepcopy(capabilities),
+  }, opts.servers[server] or {})
+  server_opts.on_attach = custom_on_attach
+
+  if opts.setup[server] then
+    if opts.setup[server](server, server_opts) then
+      return
+    end
+  elseif opts.setup["*"] then
+    if opts.setup["*"](server, server_opts) then
+      return
+    end
   end
   lspconfig[server].setup(server_opts)
 end
 
+local ensure_installed = {}
+
 local have_mason, mlsp = pcall(require, "mason-lspconfig")
+local all_mslp_servers = {}
 if have_mason then
-  mlsp.setup { ensure_installed = ensure_installed }
+  all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
+end
+
+-- auto install from mason, not need add to overrides.lua of manualed
+for server, server_opts in pairs(opts.servers) do
+  if server_opts then
+    server_opts = server_opts == true and {} or server_opts
+    -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+    if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+      -- if server_opts.mason == false then
+      setup(server)
+    else
+      ensure_installed[#ensure_installed + 1] = server
+    end
+  end
+end
+
+if have_mason then
+  mlsp.setup { ensure_installed = ensure_installed, handlers = { setup } }
 end
 
 local diagnostics = {

@@ -20,9 +20,12 @@ local plugins = {
       },
       { "folke/neoconf.nvim", cmd = "Neoconf", dependencies = { "nvim-lspconfig" } },
       { "folke/neodev.nvim", opts = {} },
+      {
+        "williamboman/mason-lspconfig.nvim",
+      },
     },
     config = function()
-      require "plugins.configs.lspconfig"
+      require("plugins.configs.lspconfig").defaults()
       require "custom.configs.lspconfig"
     end, -- Override to setup mason-lspconfig
   },
@@ -30,14 +33,6 @@ local plugins = {
   -- override plugin configs
   {
     "williamboman/mason.nvim",
-    dependencies = {
-      {
-        "williamboman/mason-lspconfig.nvim",
-        opts = {
-          automatic_installation = true,
-        },
-      },
-    },
     opts = overrides.mason,
     config = function(_, opts)
       dofile(vim.g.base46_cache .. "mason")
@@ -73,11 +68,6 @@ local plugins = {
   {
     "nvim-tree/nvim-tree.lua",
     enabled = false,
-  },
-
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    version = "2",
   },
 
   -- Install a plugin
@@ -139,6 +129,7 @@ local plugins = {
 
   {
     "kylechui/nvim-surround",
+    event = "VeryLazy",
     opts = {},
   },
 
@@ -241,34 +232,11 @@ local plugins = {
     ft = { "cpp", "c" },
     config = function(_, opts)
       require("core.utils").load_mappings "clangd"
-      local custom_opts = require "custom.configs.clangd"
-      require("clangd_extensions").setup(vim.tbl_deep_extend("force", opts or {}, custom_opts))
+      require("clangd_extensions").setup(opts)
     end,
-    opts = {
-      inlay_hints = {
-        inline = false,
-      },
-      ast = {
-        --These require codicons (https://github.com/microsoft/vscode-codicons)
-        role_icons = {
-          type = "",
-          declaration = "",
-          expression = "",
-          specifier = "",
-          statement = "",
-          ["template argument"] = "",
-        },
-        kind_icons = {
-          Compound = "",
-          Recovery = "",
-          TranslationUnit = "",
-          PackExpansion = "",
-          TemplateTypeParm = "",
-          TemplateTemplateParm = "",
-          TemplateParamObject = "",
-        },
-      },
-    },
+    opts = function()
+      return require "custom.configs.clangd"
+    end,
   },
 
   {
@@ -282,6 +250,11 @@ local plugins = {
       large_file_cutoff = 2000,
       large_file_overrides = {
         providers = { "lsp" },
+      },
+      filetypes_denylist = {
+        "NvimTree",
+        "aerial",
+        "TelescopePrompt",
       },
     },
     config = function(_, opts)
@@ -307,6 +280,28 @@ local plugins = {
         prev_match = "N",
         replace_confirm = "<cr>",
         replace_all = "<leader><cr>",
+      },
+    },
+  },
+
+  {
+    "stevearc/aerial.nvim",
+    cmd = { "AerialToggle" },
+    init = function()
+      require("core.utils").load_mappings "outline"
+    end,
+    opts = {
+      show_guides = true,
+      attach_mode = "global",
+      backends = { "lsp", "treesitter", "markdown", "man" },
+      filter_kind = false,
+      layout = {
+        resize_to_content = false,
+        win_opts = {
+          winhl = "Normal:NormalFloat,FloatBorder:NormalFloat,SignColumn:SignColumnSB",
+          signcolumn = "yes",
+          statuscolumn = " ",
+        },
       },
     },
   },
