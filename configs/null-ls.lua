@@ -20,6 +20,9 @@ local sources = {
 
   -- toml
   b.formatting.taplo,
+
+  -- rust
+  b.formatting.rustfmt,
 }
 
 null_ls.setup {

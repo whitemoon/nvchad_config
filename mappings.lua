@@ -318,11 +318,15 @@ M.taplo = {
   },
 }
 
-M.rust_tools = {
+M. rustaceanvim = {
   plugin = true,
   n = {
-    K = { "<cmd>RustHoverActions<cr>", "Hover Actions (Rust)" },
-    ["ga"] = { "<cmd>RustCodeAction<cr>", "Code Action (Rust)" },
+    K = {
+      function()
+        vim.cmd.RustLsp { "hover", "actions" }
+      end,
+      "Hover Actions (Rust)",
+    },
   },
 }
 

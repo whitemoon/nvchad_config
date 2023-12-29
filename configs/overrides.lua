@@ -26,8 +26,7 @@ M.treesitter = {
 
 M.mason = {
   github = {
-    -- download_url_template = "https://ghproxy.com/https://github.com/%s/releases/download/%s/%s",
-    download_url_template = "https://hub.nuaa.cf/%s/releases/download/%s/%s",
+    download_url_template = "https://mirror.ghproxy.com/https://github.com/%s/releases/download/%s/%s",
   },
   ensure_installed = {
     -- lua stuff

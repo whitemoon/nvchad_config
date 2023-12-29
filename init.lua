@@ -27,7 +27,7 @@ opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
 opt.cursorcolumn = true
 
 if vim.g.neovide then
-  vim.o.guifont = "Iosevka Nerd Font Mono:h15"
+  vim.o.guifont = "ComicShannsMono Nerd Font:h15"
   vim.g.neovide_refresh_rate = 75
   -- vim.g.neovide_transparency = 0.9
   -- transparent popupmenu and float window
