@@ -1,43 +1,39 @@
--- local autocmd = vim.api.nvim_create_autocmd
+vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
+vim.g.mapleader = " "
 
--- Auto resize panes when resizing nvim window
--- autocmd("VimResized", {
---   pattern = "*",
---   command = "tabdo wincmd =",
--- })
-local opt = vim.opt
+-- bootstrap lazy and all plugins
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
-opt.spelllang = "en_us,cjk"
-opt.fileencodings = "ucs-bom,utf-8,gbk,big5,gb18030,latin1"
-opt.list = true
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-
--- Folding
-opt.foldlevel = 99
-opt.foldtext = "v:lua.require'custom.utils'.foldtext()"
--- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
-if vim.fn.has "nvim-0.10" == 1 then
-  opt.foldmethod = "expr"
-  opt.foldexpr = "v:lua.require'custom.utils'.foldexpr()"
-else
-  opt.foldmethod = "indent"
+if not vim.loop.fs_stat(lazypath) then
+  local repo = "https://github.com/folke/lazy.nvim.git"
+  vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
 end
 
-opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
-opt.cursorcolumn = true
+vim.opt.rtp:prepend(lazypath)
 
-if vim.g.neovide then
-  vim.o.guifont = "ComicShannsMono Nerd Font:h15"
-  vim.g.neovide_refresh_rate = 75
-  -- vim.g.neovide_transparency = 0.9
-  -- transparent popupmenu and float window
-  -- vim.o.winblend = 80
-  -- vim.o.pumblend = 80
+local lazy_config = require "configs.lazy"
 
-  -- vim.g.neovide_cursor_vfx_mode = "sonicboom"
-  vim.g.neovide_cursor_vfx_mode = "ripple"
-  vim.g.neovide_underline_automatic_scaling = true
-  vim.g.neovide_hide_mouse_when_typing = true
-end
+-- load plugins
+require("lazy").setup({
+  {
+    "NvChad/NvChad",
+    lazy = false,
+    branch = "v2.5",
+    import = "nvchad.plugins",
+    config = function()
+      require "options"
+    end,
+  },
 
-require "custom.autocmds"
+  { import = "plugins" },
+}, lazy_config)
+
+-- load theme
+dofile(vim.g.base46_cache .. "defaults")
+dofile(vim.g.base46_cache .. "statusline")
+
+require "nvchad.autocmds"
+
+vim.schedule(function()
+  require "mappings"
+end)
