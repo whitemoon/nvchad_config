@@ -11,38 +11,11 @@ return {
   {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre' -- uncomment for format on save
-    config = function()
-      require "configs.conform"
+    opts = function()
+      return require "configs.conform"
     end,
   },
 
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   config = function()
-  --     require("nvchad.configs.lspconfig").defaults()
-  --     require "configs.lspconfig"
-  --   end,
-  -- },
-
-  -- {
-  -- 	"williamboman/mason.nvim",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"lua-language-server", "stylua",
-  -- 			"html-lsp", "css-lsp" , "prettier"
-  -- 		},
-  -- 	},
-  -- },
-  --
-  -- {
-  -- 	"nvim-treesitter/nvim-treesitter",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"vim", "lua", "vimdoc
-  --      "html", "css"
-  -- 		},
-  -- 	},
-  -- },
   {
     "williamboman/mason.nvim",
     opts = overrides.mason,
@@ -77,7 +50,6 @@ return {
     cmd = { "TodoTrouble", "TodoTelescope" },
     event = "VeryLazy",
     opts = {},
-    -- config = true,
   },
 
   {
@@ -149,7 +121,15 @@ return {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      { "Saecki/crates.nvim", event = { "BufRead Cargo.toml" }, opts = {} },
+      {
+        "Saecki/crates.nvim",
+        event = { "BufRead Cargo.toml" },
+        opts = {
+          src = {
+            cmp = { enabled = true },
+          },
+        },
+      },
       { "lukas-reineke/cmp-rg" },
     },
     opts = function()
@@ -161,5 +141,78 @@ return {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
     opts = {},
+  },
+
+  {
+    "mfussenegger/nvim-dap",
+    opts = {},
+    config = function()
+      require("configs.dap_config").dap()
+    end,
+    dependencies = {
+      -- fancy UI for the debugger
+      {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "nvim-neotest/nvim-nio" },
+        opts = {},
+        config = function(_, opts)
+          require("configs.dap_config").dapui(_, opts)
+        end,
+      },
+
+      -- virtual text for the debugger
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        opts = {},
+      },
+      -- mason.nvim integration
+      {
+        "jay-babu/mason-nvim-dap.nvim",
+        dependencies = "mason.nvim",
+        cmd = { "DapInstall", "DapUninstall" },
+        opts = {
+          -- Makes a best effort to setup the various debuggers with
+          -- reasonable debug configurations
+          automatic_installation = true,
+
+          -- You can provide additional configuration to the handlers,
+          -- see mason-nvim-dap README for more information
+          handlers = {},
+
+          -- You'll need to check that you have the required things installed
+          -- online, please don't ask me how to install them :)
+          ensure_installed = {
+            -- Update this to ensure that you have the debuggers for the langs you want
+          },
+        },
+      },
+
+      {
+        "mfussenegger/nvim-dap-python",
+      },
+    },
+  },
+
+  {
+    "Mythos-404/xmake.nvim",
+    event = "BufReadPost xmake.lua",
+    config = true,
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+  },
+
+  {
+    "zeioth/garbage-day.nvim",
+    event = "VeryLazy",
+    opts = {
+      aggressive_mode = false,
+      excluded_lsp_clients = {
+        "conform",
+      },
+      grace_period = (60 * 15),
+      wakeup_delay = 3000,
+      notifications = false,
+      retries = 3,
+      timeout = 1000,
+    },
   },
 }

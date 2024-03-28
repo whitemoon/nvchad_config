@@ -37,6 +37,29 @@ M.opts = {
       capabilities = {
         offsetEncoding = { "utf-16" },
       },
+      root_dir = function(fname)
+        return require("lspconfig.util").root_pattern(
+          "Makefile",
+          "configure.ac",
+          "configure.in",
+          "config.h.in",
+          "meson.build",
+          "meson_options.txt",
+          "build.ninja",
+          ".vscode",
+          ".git"
+        )(fname) or require("lspconfig.util").find_git_ancestor(fname)
+      end,
+      cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm",
+        "--compile-commands-dir=.vscode",
+      },
     },
     jsonls = {},
   },

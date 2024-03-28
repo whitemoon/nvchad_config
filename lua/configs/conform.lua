@@ -15,6 +15,7 @@ local options = {
     cpp = { "clang_format" },
     toml = { "taplo" },
     markdown = { "prettier" },
+    json = { "prettier" },
   },
 
   -- format_on_save = {
@@ -24,4 +25,4 @@ local options = {
   -- },
 }
 
-require("conform").setup(options)
+return options

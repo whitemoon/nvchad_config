@@ -2,6 +2,17 @@ require "nvchad.mappings"
 
 -- add yours here
 
+local function get_args(config)
+  local args = type(config.args) == "function" and (config.args() or {}) or config.args or {}
+  config = vim.deepcopy(config)
+  ---@cast args string[]
+  config.args = function()
+    local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
+    return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
+  end
+  return config
+end
+
 local map = vim.keymap.set
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
@@ -67,3 +78,62 @@ map("n", "<leader>m", "<cmd>MCstart<cr>", { desc = "Multicursors Create a select
 map("n", "<leader>sr", function()
   require("ssr").open()
 end, { desc = "Ssr Structural search and replace" })
+
+-- dap
+map("n", "<leader>du", function()
+  require("dapui").toggle {}
+end, { desc = "Dap UI" })
+map({ "n", "v" }, "<leader>de", function()
+  require("dapui").eval()
+end, { desc = "Eval" })
+map("n", "<leader>dB", function()
+  require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ")
+end, { desc = "Dap: Breakpoint Condition" })
+map("n", "<leader>db", function()
+  require("dap").toggle_breakpoint()
+end, { desc = "Dap: Toggle Breakpoint" })
+map("n", "<leader>dc", function()
+  require("dap").continue()
+end, { desc = "Dap: Continue" })
+map("n", "<leader>da", function()
+  require("dap").continue { before = get_args }
+end, { desc = "Dap: Run with Args" })
+map("n", "<leader>dC", function()
+  require("dap").run_to_cursor()
+end, { desc = "Dap: Run to Cursor" })
+map("n", "<leader>dg", function()
+  require("dap").goto_()
+end, { desc = "Dap: Go to line (no execute)" })
+map("n", "<leader>di", function()
+  require("dap").step_into()
+end, { desc = "Dap: Step Into" })
+map("n", "<leader>dj", function()
+  require("dap").down()
+end, { desc = "Dap: Down" })
+map("n", "<leader>dk", function()
+  require("dap").up()
+end, { desc = "Dap: Up" })
+map("n", "<leader>dl", function()
+  require("dap").run_last()
+end, { desc = "Dap: Run Last" })
+map("n", "<leader>dO", function()
+  require("dap").step_out()
+end, { desc = "Dap: Step Out" })
+map("n", "<leader>do", function()
+  require("dap").step_over()
+end, { desc = "Dap: Step Over" })
+map("n", "<leader>dp", function()
+  require("dap").pause()
+end, { desc = "Dap: Pause" })
+map("n", "<leader>dr", function()
+  require("dap").repl.toggle()
+end, { desc = "Dap: Toggle REPL" })
+map("n", "<leader>ds", function()
+  require("dap").session()
+end, { desc = "Dap: Session" })
+map("n", "<leader>dt", function()
+  require("dap").terminate()
+end, { desc = "Dap: Terminate" })
+map("n", "<leader>dw", function()
+  require("dap.ui.widgets").hover()
+end, { desc = "Dap: Widgets" })
