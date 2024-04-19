@@ -8,18 +8,18 @@ M.on_attach = function(client, bufnr)
   require("nvchad.configs.lspconfig").on_attach(client, bufnr)
 
   if client.supports_method "textDocument/inlayHint" then
-    vim.lsp.inlay_hint.enable(bufnr, true)
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
   local function opts(desc)
-    return { buffer = bufnr, desc = desc }
+    return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
   map("n", "gd", function()
     require("telescope.builtin").lsp_definitions { reuse_win = true }
-  end, opts "Lsp Go to definition")
+  end, opts "Go to definition")
   map("n", "gr", function()
     require("telescope.builtin").lsp_references { reuse_win = true }
-  end, opts "Lsp Show references")
+  end, opts "Show references")
 end
 
 M.on_init = function(client, _)
@@ -62,6 +62,7 @@ M.opts = {
       },
     },
     jsonls = {},
+    taplo = {},
   },
 }
 --

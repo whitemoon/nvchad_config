@@ -72,7 +72,7 @@ map("n", "<leader>lU", function()
 end, { desc = "Neogen: File" })
 
 -- multicursors
-map("n", "<leader>m", "<cmd>MCstart<cr>", { desc = "Multicursors Create a selection for word under the cursor" })
+map("n", "m", "<cmd>MCstart<cr>", { desc = "Multicursors Create a selection for word under the cursor" })
 
 -- ssr
 map("n", "<leader>sr", function()

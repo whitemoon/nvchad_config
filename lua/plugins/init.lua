@@ -85,15 +85,29 @@ return {
 
   {
     "mrcjkb/rustaceanvim",
-    ft = { "rust" },
+    lazy = false,
+    config = function()
+      vim.g.rustaceanvim = {
+        server = {
+          on_attach = function(client, bufnr)
+            require("configs.lspconfig").on_attach(client, bufnr)
+          end,
+        },
+        default_settings = {
+          ["rust-analyzer"] = {
+            checkOnSave = false,
+            check = {
+              command = "clippy --no-deps",
+            },
+          },
+        },
+      }
+    end,
   },
 
   {
     "p00f/clangd_extensions.nvim",
     ft = { "cpp", "c" },
-    -- config = function(_, opts)
-    -- 	require("clangd_extensions").setup(opts)
-    -- end,
     opts = function()
       return require "configs.clangd"
     end,
@@ -200,19 +214,30 @@ return {
     dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
   },
 
+  -- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
   {
-    "zeioth/garbage-day.nvim",
+    "folke/noice.nvim",
     event = "VeryLazy",
-    opts = {
-      aggressive_mode = false,
-      excluded_lsp_clients = {
-        "conform",
-      },
-      grace_period = (60 * 15),
-      wakeup_delay = 3000,
-      notifications = false,
-      retries = 3,
-      timeout = 1000,
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
     },
+    opts = function()
+      return require "configs.noice"
+    end,
+    -- stylua: ignore
+    -- keys = {
+    --   { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
+    --   { "<leader>snl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
+    --   { "<leader>snh", function() require("noice").cmd("history") end, desc = "Noice History" },
+    --   { "<leader>sna", function() require("noice").cmd("all") end, desc = "Noice All" },
+    --   { "<leader>snd", function() require("noice").cmd("dismiss") end, desc = "Dismiss All" },
+    --   { "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true, desc = "Scroll forward", mode = {"i", "n", "s"} },
+    --   { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, desc = "Scroll backward", mode = {"i", "n", "s"}},
+    -- },
   },
 }

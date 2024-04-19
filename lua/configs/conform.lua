@@ -11,8 +11,8 @@ local options = {
       end
     end,
     bash = { "shfmt" },
-    c = { "clang_format" },
-    cpp = { "clang_format" },
+    c = { "clang-format" },
+    cpp = { "clang-format" },
     toml = { "taplo" },
     markdown = { "prettier" },
     json = { "prettier" },

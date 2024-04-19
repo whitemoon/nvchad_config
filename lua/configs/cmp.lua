@@ -1,6 +1,7 @@
 local options = require "nvchad.configs.cmp"
 
-options.sources = vim.tbl_deep_extend("keep", options.sources, { { name = "crates" }, { name = "rg" } })
+table.insert(options.sources, { name = "crates" })
+table.insert(options.sources, { name = "rg" })
 
 options.experimental = {
   ghost_text = true,
