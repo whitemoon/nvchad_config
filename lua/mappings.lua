@@ -56,7 +56,7 @@ end, { desc = "Flash Treesitter" })
 
 --neogen
 map("n", "<leader>ln", function()
-  require("neogen").generate { type = "current" }
+  require("neogen").generate()
 end, { desc = "Neogen Current" })
 map("n", "<leader>lc", function()
   require("neogen").generate { type = "class" }
