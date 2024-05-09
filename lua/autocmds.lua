@@ -19,15 +19,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup "indent_and_tabs",
-  pattern = { "lua", "ruby", "markdown" },
-  callback = function()
-    vim.opt_local.shiftwidth = 2
-    vim.opt_local.tabstop = 2
-  end,
-})
-
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = augroup "highlight_yank",
@@ -36,14 +27,22 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
--- Auto create dir when saving a file, in case some intermediate directory does not exist
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  group = augroup "auto_create_dir",
+vim.api.nvim_create_autocmd("BufWritePost", {
+  group = augroup "modified_list",
   callback = function(event)
-    if event.match:match "^%w%w+:[\\/][\\/]" then
-      return
-    end
-    local file = vim.loop.fs_realpath(event.match) or event.match
-    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+    local buf = event.buf
+    vim.b[buf].custom_buffer_modified = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufAdd", "BufEnter", "tabnew" }, {
+  group = augroup "delete_unmodified_buffer",
+  callback = function()
+    vim.t.bufs = vim.tbl_filter(function(bufnr)
+      if vim.b[bufnr].custom_buffer_modified or vim.api.nvim_get_option_value("modified", { buf = bufnr }) then
+        return true
+      end
+      return false
+    end, vim.t.bufs)
   end,
 })

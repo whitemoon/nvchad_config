@@ -19,15 +19,29 @@ opt.fileencodings = "ucs-bom,utf-8,gbk,big5,gb18030,latin1"
 
 opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
 
+-- opt.fillchars = {
+--   foldopen = "",
+--   foldclose = "",
+--   fold = " ",
+--   foldsep = " ",
+--   diff = "╱",
+--   eob = " ",
+-- }
+
 -- Folding
 opt.foldlevel = 99
 
 if vim.fn.has "nvim-0.10" == 1 then
   opt.foldmethod = "expr"
   opt.foldexpr = "v:lua.require'configs.foldexpr'.foldexpr()"
+  opt.foldtext = ""
+  opt.fillchars = "fold: "
 
   opt.smoothscroll = true
 end
+
+-- Fix markdown indentation settings
+vim.g.markdown_recommended_style = 0
 
 if vim.g.neovide then
   vim.o.guifont = "GeistMono Nerd Font:h13"

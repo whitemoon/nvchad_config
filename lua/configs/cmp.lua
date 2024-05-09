@@ -8,13 +8,9 @@ options.experimental = {
   ghost_text = true,
 }
 
-options.mapping = vim.tbl_deep_extend(
-  "keep",
-  options.mapping,
-  { ["<CR>"] = cmp.mapping.confirm {
-    behavior = cmp.ConfirmBehavior.Replace,
-    select = true,
-  } }
-)
+options.mapping["<CR>"] = cmp.mapping.confirm {
+  behavior = cmp.ConfirmBehavior.Replace,
+  select = true,
+}
 
 return options
