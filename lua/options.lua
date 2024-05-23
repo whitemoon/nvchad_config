@@ -31,7 +31,7 @@ opt.guicursor = "n-v-c-sm:block,i-ci-ve-r-cr-o:hor20,a:blinkon100"
 -- Folding
 opt.foldlevel = 99
 
-if vim.fn.has "nvim-0.10" == 1 then
+if vim.version().minor >= 10 then
   opt.foldmethod = "expr"
   opt.foldexpr = "v:lua.require'configs.foldexpr'.foldexpr()"
   opt.foldtext = ""

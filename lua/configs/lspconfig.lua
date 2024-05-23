@@ -40,15 +40,16 @@ M.opts = {
       },
       root_dir = function(fname)
         return require("lspconfig.util").root_pattern(
-          "Makefile",
-          "configure.ac",
-          "configure.in",
-          "config.h.in",
-          "meson.build",
-          "meson_options.txt",
-          "build.ninja",
+          "xmake.lua",
           ".vscode",
           ".git"
+          -- "Makefile",
+          -- "configure.ac",
+          -- "configure.in",
+          -- "config.h.in",
+          -- "meson.build",
+          -- "meson_options.txt",
+          -- "build.ninja"
         )(fname) or require("lspconfig.util").find_git_ancestor(fname)
       end,
       cmd = {
@@ -60,6 +61,11 @@ M.opts = {
         "--function-arg-placeholders",
         "--fallback-style=llvm",
         "--compile-commands-dir=.vscode",
+      },
+      init_options = {
+        usePlaceholders = true,
+        completeUnimported = true,
+        clangdFileStatus = true,
       },
     },
     jsonls = {},

@@ -10,12 +10,18 @@ local options = {
         return { "isort", "black" }
       end
     end,
-    bash = { "shfmt" },
+    sh = { "shfmt" },
     c = { "clang-format" },
     cpp = { "clang-format" },
     toml = { "taplo" },
     markdown = { "prettier" },
     json = { "prettier" },
+  },
+
+  formatters = {
+    shfmt = {
+      prepend_args = { "-i", "2" },
+    },
   },
 
   -- format_on_save = {

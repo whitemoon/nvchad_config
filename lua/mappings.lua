@@ -37,14 +37,36 @@ map("n", "<S-h>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "Goto prev buffer" })
 
+-- only delete unmodified buffers
+map("n", "<leader>X", function()
+  vim.t.bufs = vim.tbl_filter(function(bufnr)
+    if vim.api.nvim_get_current_win() == 1000 then
+      if vim.b[bufnr].custom_buffer_modified or vim.api.nvim_get_option_value("modified", { buf = bufnr }) then
+        return true
+      end
+    end
+    return false
+  end, vim.t.bufs)
+end, { desc = "buffer deleted(unmodified buffer)" })
+
 -- Telescope
-map("n", "<leader>fp", "<cmd>Telescope projects<cr>", { desc = "Telescope Find projects" })
+map("n", "<leader>fp", function()
+  require("telescope").extensions.project.project {}
+end, { desc = "Telescope Find project" })
 
 map("n", "<leader>fT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", { desc = "Telescope Find Todo/Fix/Fixme" })
 
 map("v", "<leader>fw", function()
   require("telescope.builtin").grep_string()
 end, { desc = "Telescope Find visual range words" })
+
+map("n", "<leader>fr", function()
+  require("telescope").extensions.live_grep_args.live_grep_args()
+end, { desc = "Telescope Find live grep args" })
+
+map("v", "<leader>fr", function()
+  require("telescope").extensions.live_grep_args.grep_visual_selection()
+end, { desc = "Telescope Find live grep args" })
 
 -- flash
 map({ "n", "x", "o" }, "s", function()
@@ -128,7 +150,7 @@ end, { desc = "Dap Pause" })
 map("n", "<leader>dr", function()
   require("dap").repl.toggle()
 end, { desc = "Dap Toggle REPL" })
-map("n", "<leader>ds", function()
+map("n", "<leader>dS", function()
   require("dap").session()
 end, { desc = "Dap Session" })
 map("n", "<leader>dt", function()
@@ -154,3 +176,13 @@ map("n", "<leader>sp", function()
 end, {
   desc = "Spectre Search on current file",
 })
+
+-- gitsigns
+map("n", "<leader>gb", function()
+  require("gitsigns").blame_line { full = true }
+end, {
+  desc = "Blame line",
+})
+
+-- diagnostic
+map("n", "<leader>lf", vim.diagnostic.open_float, { desc = "lsp floating diagnostics" })

@@ -49,7 +49,7 @@ end
 
 M.telescope = function()
   local default = require "nvchad.configs.telescope"
-  default.extensions_list = vim.tbl_deep_extend("keep", default.extensions_list, { "projects" })
+  default.extensions_list = vim.tbl_deep_extend("keep", default.extensions_list, { "project", "live_grep_args" })
 
   return default
 end

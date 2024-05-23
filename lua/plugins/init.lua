@@ -30,11 +30,11 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       {
-        "jay-babu/project.nvim",
-        opts = { ignore_lsp = { "lua_ls" } },
-        config = function(_, opts)
-          require("project_nvim").setup(opts)
-        end,
+        "nvim-telescope/telescope-project.nvim",
+        dependencies = { "nvim-telescope/telescope-file-browser.nvim" },
+      },
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
       },
     },
     opts = overrides.telescope,
@@ -140,7 +140,7 @@ return {
         "Saecki/crates.nvim",
         event = { "BufRead Cargo.toml" },
         opts = {
-          src = {
+          completion = {
             cmp = { enabled = true },
           },
         },
@@ -254,5 +254,18 @@ return {
     "karb94/neoscroll.nvim",
     event = "VeryLazy",
     opts = {},
+  },
+  {
+    "MeanderingProgrammer/markdown.nvim",
+    ft = "markdown",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {},
+  },
+  {
+    "p00f/clangd_extensions.nvim",
+    ft = { "c", "cpp" },
+    opts = function()
+      return require "configs.clangd"
+    end,
   },
 }

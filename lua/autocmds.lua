@@ -34,15 +34,3 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     vim.b[buf].custom_buffer_modified = true
   end,
 })
-
-vim.api.nvim_create_autocmd({ "BufAdd", "BufEnter", "tabnew" }, {
-  group = augroup "delete_unmodified_buffer",
-  callback = function()
-    vim.t.bufs = vim.tbl_filter(function(bufnr)
-      if vim.b[bufnr].custom_buffer_modified or vim.api.nvim_get_option_value("modified", { buf = bufnr }) then
-        return true
-      end
-      return false
-    end, vim.t.bufs)
-  end,
-})

@@ -13,4 +13,7 @@ options.mapping["<CR>"] = cmp.mapping.confirm {
   select = true,
 }
 
+options.sorting = require("cmp.config.default")().sorting
+table.insert(options.sorting.comparators, 1, require "clangd_extensions.cmp_scores")
+
 return options
